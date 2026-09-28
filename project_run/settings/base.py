@@ -117,4 +117,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 COMPANY_NAME = 'Чита в движении'
 SLOGAN = 'Старт. Темп. Победа над собой'
-CONTACTS = 'город Чита, ул. Красноармеская, д. 68'
+CONTACTS = 'Отсюда начинается твой маршрут'
