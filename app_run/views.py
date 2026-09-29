@@ -4,10 +4,9 @@ from rest_framework.response import Response
 
 from django.conf import settings
 from django.shortcuts import render
-from django.contrib.auth.models import User
 
-from app_run import models
-from app_run import serializers
+from app_run.models import Run
+from app_run.serializers import RunSerializer
 
 
 @api_view(['GET'])
@@ -22,21 +21,5 @@ def company_contacts(request):
 
 
 class RunViewSet(viewsets.ModelViewSet):
-    queryset = models.Run.objects.all()
-    serializer_class = serializers.RunSerializer
-
-
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
-
-    def get_queryset(self):
-        qs = self.queryset.exclude(is_superuser=True)
-
-        type_of_user = self.request.query_params.get('type', None)
-        if type_of_user == 'coach':
-            qs = qs.filter(is_staff=True)
-        if type_of_user == 'athlete':
-            qs = qs.filter(is_staff=False)
-
-        return qs
+    queryset = Run.objects.all()
+    serializer_class = RunSerializer
