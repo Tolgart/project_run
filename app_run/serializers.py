@@ -15,4 +15,4 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'date_joined', 'username', 'last_name', 'first_name', 'type']
 
     def get_type(self, obj):
-        return 'Тренер' if obj.is_staff else 'Атлет'
+        return 'coach' if obj.is_staff else 'athlete'
