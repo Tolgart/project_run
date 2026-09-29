@@ -19,7 +19,6 @@ def company_contacts(request):
 
     return Response(company_data)
 
-
 class RunViewSet(viewsets.ModelViewSet):
     queryset = Run.objects.all()
     serializer_class = RunSerializer
