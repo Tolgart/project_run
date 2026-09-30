@@ -2,10 +2,24 @@ from rest_framework import serializers
 from .models import Run
 from django.contrib.auth.models import User
 
+class UserSerializerForRunViewSet(serializers.ModelSerializer):
+    """
+    Используется как вложенный сериализатор для RunSerializer,
+    который отдаёт только нужные поля модели User при запросе
+    через api/runs.
+    """
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'last_name', 'first_name']
+
+
 class RunSerializer(serializers.ModelSerializer):
+    athlete = UserSerializerForRunViewSet()
+
     class Meta:
         model = Run
         fields = '__all__'
+
 
 class UserSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()

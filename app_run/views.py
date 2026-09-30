@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 
 from app_run.models import Run
-from app_run.serializers import RunSerializer, UserSerializer
+from app_run import serializers
 
 
 @api_view(['GET'])
@@ -21,13 +21,13 @@ def company_contacts(request):
 
 
 class RunViewSet(viewsets.ModelViewSet):
-    queryset = Run.objects.all()
-    serializer_class = RunSerializer
+    queryset = Run.objects.select_related('athlete').all()
+    serializer_class = serializers.RunSerializer
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = serializers.UserSerializer
 
     def get_queryset(self):
         qs = self.queryset.exclude(is_superuser=True)
