@@ -14,7 +14,7 @@ class UserSerializerForRunViewSet(serializers.ModelSerializer):
 
 
 class RunSerializer(serializers.ModelSerializer):
-    athlete_data = UserSerializerForRunViewSet(source='athlete')
+    athlete_data = UserSerializerForRunViewSet(source='athlete', read_only=True)
 
     class Meta:
         model = Run
