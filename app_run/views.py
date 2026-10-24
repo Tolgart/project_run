@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from app_run.models import Run
+from app_run.models import Run, AthleteInfo
 from app_run import serializers
 
 
@@ -99,3 +99,30 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.filter(is_staff=False)
 
         return qs
+
+class AthleteInfoAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        user = get_object_or_404(User, id=user_id)
+
+        athlete_info, created = AthleteInfo.objects.get_or_create(user_id=user)
+
+        serializer = serializers.AthleteInfoSerializer(athlete_info)
+        return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        user = get_object_or_404(User, id=user_id)
+
+        goals = request.PUT.get('goals')
+        weight = request.PUT.get('weight')
+
+        if not 0 <= weight <= 900:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        athlete_info, created = AthleteInfo.objects.update_or_create(user_id=user,
+                                                                     defaults={'goals': goals, 'weight': weight}
+                                                                     )
+
+        serializer = serializers.AthleteInfoSerializer(athlete_info)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
