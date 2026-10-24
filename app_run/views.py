@@ -114,8 +114,8 @@ class AthleteInfoAPIView(APIView):
         user_id = kwargs.get('user_id')
         user = get_object_or_404(User, id=user_id)
 
-        goals = request.PUT.get('goals')
-        weight = request.PUT.get('weight')
+        goals = request.data.get('goals')
+        weight = request.data.get('weight')
 
         if not 0 <= weight <= 900:
             return Response(status=status.HTTP_400_BAD_REQUEST)
