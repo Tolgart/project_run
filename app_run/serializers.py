@@ -39,4 +39,4 @@ class UserSerializer(serializers.ModelSerializer):
 class AthleteInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AthleteInfo
-        fields = ['goals', 'weight']
+        fields = ['user_id', 'goals', 'weight']
