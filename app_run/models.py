@@ -7,7 +7,7 @@ class Run(models.Model):
         IN_PROGRESS = 'in_progress', 'in_progress'
         FINISHED = 'finished', 'finished'
 
-    athlete = models.ForeignKey(User, on_delete=models.CASCADE)
+    athlete = models.ForeignKey(User, on_delete=models.CASCADE, related_name='runs')
     comment = models.TextField()
     status = models.CharField(max_length=11, choices=StatusChoices, default=StatusChoices.INIT)
     created_at = models.DateTimeField(auto_now_add=True)
