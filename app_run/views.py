@@ -117,7 +117,7 @@ class AthleteInfoAPIView(APIView):
         goals = request.data.get('goals')
         weight = request.data.get('weight')
 
-        if not (weight.isdigit() and 0 <= int(weight) <= 900):
+        if not (weight.isdigit() and 0 < int(weight) < 900):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         athlete_info, created = AthleteInfo.objects.update_or_create(user_id=user,
