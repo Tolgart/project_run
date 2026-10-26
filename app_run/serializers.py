@@ -57,12 +57,7 @@ class PositionSerializer(serializers.ModelSerializer):
         fields = ['run', 'latitude', 'longitude']
 
     def validate_run(self, value):
-        try:
-            run = Run.objects.get(id=value)
-        except Run.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        if run.status != Run.StatusChoices.IN_PROGRESS:
+        if value.status != Run.StatusChoices.IN_PROGRESS:
             raise serializers.ValidationError("Забег должен быть в статусе 'in_progress'")
 
         return value
