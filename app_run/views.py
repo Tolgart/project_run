@@ -139,6 +139,15 @@ class ChallengeViewSet(viewsets.ModelViewSet):
     queryset = Challenge.objects.all()
     serializer_class = serializers.ChallengeSerializer
 
+    def get_queryset(self):
+        qs = self.queryset
+
+        athlete = self.request.query_params.get('athlete', None
+        if athlete:
+            qs = qs.filter(athlete=athlete)
+
+        return qs
+
 
 class PositionViewSet(viewsets.ModelViewSet):
     queryset = Position.objects.all()
