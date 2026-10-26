@@ -153,3 +153,12 @@ class PositionViewSet(viewsets.ModelViewSet):
     queryset = Position.objects.all()
     serializer_class = serializers.PositionSerializer
 
+    def get_queryset(self):
+        qs = self.queryset
+
+        run = self.request.query_params.get('run', None)
+        if run:
+            qs = qs.filter(run=run)
+
+        return qs
+
