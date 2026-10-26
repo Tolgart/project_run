@@ -78,7 +78,6 @@ class RunStopAPIView(APIView):
         run.distance = calculate_distance(run_id)
         run.save()
 
-
         total_stats = user.runs.filter(status=run.StatusChoices.FINISHED).aggregate(
             finished_runs = Count('distance'),
             total_distance = Sum('distance')
@@ -87,8 +86,7 @@ class RunStopAPIView(APIView):
         if total_stats['finished_runs'] == 10:
             Challenge.objects.get_or_create(full_name="Сделай 10 Забегов!", athlete=user)
         if total_stats['total_distance'] >= 50:
-            try:
-                Challenge.objects.get_or_create(full_name='Пробеги 50 километров!', athlete=user)
+            Challenge.objects.get_or_create(full_name='Пробеги 50 километров!', athlete=user)
 
         return Response(status=status.HTTP_200_OK)
 
