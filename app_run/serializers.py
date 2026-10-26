@@ -1,5 +1,7 @@
-from rest_framework import serializers
-from .models import Run, AthleteInfo, Challenge
+from rest_framework import serializers, status
+from rest_framework.generics import get_object_or_404
+
+from .models import Run, AthleteInfo, Challenge, Position
 from django.contrib.auth.models import User
 
 class UserSerializerForRunSerializer(serializers.ModelSerializer):
@@ -46,3 +48,29 @@ class ChallengeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Challenge
         fields = '__all__'
+
+
+class PositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = ['id', 'latitude', 'longitude']
+
+    def validate_id(self, value):
+        run = get_object_or_404(Run, id=value)
+
+        if run.status != Run.StatusChoices.IN_PROGRESS:
+            raise serializers.ValidationError("Забег должен быть в статусе 'in_progress'")
+
+        return value
+
+    def validate_latitude(self, value):
+        if not (-90.0 <= value <= 90.0):
+            raise serializers.ValidationError()
+
+        return value
+
+    def validate_longitude(self, value):
+        if not (-180.0 <= value <= 180.0):
+            raise serializers.ValidationError()
+
+        return value

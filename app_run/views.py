@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from app_run.models import Run, AthleteInfo, Challenge
+from app_run.models import Run, AthleteInfo, Challenge, Position
 from app_run import serializers
 
 
@@ -77,7 +77,7 @@ class RunStopAPIView(APIView):
 
         finished_runs = user.runs.filter(status=run.StatusChoices.FINISHED).count()
         if finished_runs == 10:
-            Challenge.objects.create(full_name="Сделай 10 Забегов!", athlete=user)
+                Challenge.objects.create(full_name="Сделай 10 Забегов!", athlete=user)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -105,6 +105,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.filter(is_staff=False)
 
         return qs
+
 
 class AthleteInfoAPIView(APIView):
     def get(self, request, *args, **kwargs):
@@ -137,3 +138,8 @@ class AthleteInfoAPIView(APIView):
 class ChallengeViewSet(viewsets.ModelViewSet):
     queryset = Challenge.objects.all()
     serializer_class = serializers.ChallengeSerializer
+
+
+class PositionViewSet(viewsets.ModelViewSet):
+    queryset = Position.objects.all()
+    serializer_class = serializers.PositionSerializer
