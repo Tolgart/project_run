@@ -142,7 +142,7 @@ class ChallengeViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         qs = self.queryset
 
-        athlete = self.request.query_params.get('athlete', None
+        athlete = self.request.query_params.get('athlete', None)
         if athlete:
             qs = qs.filter(athlete=athlete)
 
