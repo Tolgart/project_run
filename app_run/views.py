@@ -10,6 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.db.models import Count, Sum
 
 from app_run.models import Run, AthleteInfo, Challenge, Position
 from app_run import serializers
@@ -77,9 +78,16 @@ class RunStopAPIView(APIView):
         run.distance = calculate_distance(run_id)
         run.save()
 
-        finished_runs = user.runs.filter(status=run.StatusChoices.FINISHED).count()
-        if finished_runs == 10:
-                Challenge.objects.create(full_name="Сделай 10 Забегов!", athlete=user)
+
+        total_stats = user.runs.filter(status=run.StatusChoices.FINISHED).aggregate(
+            finished_runs = Count('distance'),
+            total_distance = Sum('distance')
+        )
+
+        if total_stats['finished_runs'] == 10:
+            Challenge.objects.create(full_name="Сделай 10 Забегов!", athlete=user)
+        if total_stats['total_distance'] >= 50:
+            Challenge.objects.create(full_name='Пробеги 50 километров!', athlete=user)
 
         return Response(status=status.HTTP_200_OK)
 

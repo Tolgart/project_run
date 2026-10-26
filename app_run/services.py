@@ -2,6 +2,10 @@ from geopy.distance import distance
 from .models import Position
 
 def calculate_distance(run_id):
+    """
+    Функция для расчёта расстояния забега.
+    Активируется в момент перевода забега в состояние FINISHED.
+    """
     total_distance_km = 0
 
     positions = Position.objects.filter(run=run_id)
