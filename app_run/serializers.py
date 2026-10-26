@@ -1,5 +1,6 @@
 from rest_framework import serializers, status
 from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
 
 from .models import Run, AthleteInfo, Challenge, Position
 from django.contrib.auth.models import User
@@ -56,7 +57,10 @@ class PositionSerializer(serializers.ModelSerializer):
         fields = ['run', 'latitude', 'longitude']
 
     def validate_run(self, value):
-        run = get_object_or_404(Run, id=value)
+        try:
+            run = Run.objects.get(id=value)
+        except Run.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if run.status != Run.StatusChoices.IN_PROGRESS:
             raise serializers.ValidationError("Забег должен быть в статусе 'in_progress'")
