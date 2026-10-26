@@ -53,9 +53,9 @@ class ChallengeSerializer(serializers.ModelSerializer):
 class PositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Position
-        fields = ['id', 'latitude', 'longitude']
+        fields = ['run', 'latitude', 'longitude']
 
-    def validate_id(self, value):
+    def validate_run(self, value):
         run = get_object_or_404(Run, id=value)
 
         if run.status != Run.StatusChoices.IN_PROGRESS:
