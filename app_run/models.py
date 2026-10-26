@@ -11,6 +11,10 @@ class Run(models.Model):
     comment = models.TextField()
     status = models.CharField(max_length=11, choices=StatusChoices, default=StatusChoices.INIT)
     created_at = models.DateTimeField(auto_now_add=True)
+    distance = models.FloatField(null=True)
+
+    def __str__(self):
+        return f'{self.pk}: {self.athlete} - {self.status}'
 
 
 class AthleteInfo(models.Model):
@@ -28,3 +32,6 @@ class Position(models.Model):
     run = models.ForeignKey(Run, on_delete=models.CASCADE)
     latitude = models.DecimalField(max_digits=6, decimal_places=4)
     longitude = models.DecimalField(max_digits=7, decimal_places=4)
+
+    def __str__(self):
+        return f'{self.run}: ({self.latitude}, {self.longitude})'

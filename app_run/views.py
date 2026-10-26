@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404
 from app_run.models import Run, AthleteInfo, Challenge, Position
 from app_run import serializers
 
+from .services import calculate_distance
 
 @api_view(['GET'])
 def company_contacts(request):
@@ -73,6 +74,7 @@ class RunStopAPIView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         run.status = run.StatusChoices.FINISHED
+        run.distance = calculate_distance(run_id)
         run.save()
 
         finished_runs = user.runs.filter(status=run.StatusChoices.FINISHED).count()
