@@ -12,10 +12,10 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.db.models import Count, Sum
 
-from app_run.models import Run, AthleteInfo, Challenge, Position
+from app_run.models import Run, AthleteInfo, Challenge, Position, CollectibleItem
 from app_run import serializers
 
-from .services import calculate_distance
+from .services import calculate_distance, parse_xlsx_to_list
 
 @api_view(['GET'])
 def company_contacts(request):
@@ -171,3 +171,34 @@ class PositionViewSet(viewsets.ModelViewSet):
 
         return qs
 
+
+class CollectibleItemViewSet(viewsets.ModelViewSet):
+    queryset = CollectibleItem.objects.all()
+    serializer_class = serializers.CollectibleItemSerializer
+
+
+class CollectibleItemUploadFileApiView(APIView):
+    def post(self, request, *args, **kwargs):
+        upload_file = request.FILES['file']
+
+        if not upload_file:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if not upload_file.name.lower().endswith('.xlsx'):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        rows = parse_xlsx_to_list(upload_file)
+
+        if not rows:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        bad_rows = []
+
+        for row in rows:
+            serializer = serializers.CollectibleItemSerializer(data=row)
+            if serializer.is_valid():
+                serializer.save()
+
+            bad_rows.append(list(row.values()))
+
+        return bad_rows
