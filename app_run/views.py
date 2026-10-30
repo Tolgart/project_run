@@ -179,7 +179,7 @@ class CollectibleItemViewSet(viewsets.ModelViewSet):
 
 class CollectibleItemUploadFileApiView(APIView):
     def post(self, request, *args, **kwargs):
-        upload_file = request.FILES['file']
+        upload_file = request.FILES.get('file')
 
         if not upload_file:
             return Response(status=status.HTTP_400_BAD_REQUEST)
