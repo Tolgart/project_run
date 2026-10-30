@@ -201,4 +201,4 @@ class CollectibleItemUploadFileApiView(APIView):
 
             bad_rows.append(list(row.values()))
 
-        return Response(data=bad_rows, status=status.HTTP_200_CREATED)
+        return Response(data=bad_rows, status=status.HTTP_200_OK)
