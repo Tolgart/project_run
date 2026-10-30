@@ -29,7 +29,9 @@ def parse_xlsx_to_list(xlsx_file):
     summary_list = []
 
     file_rows = ws.iter_rows(values_only=True)
-    headers = next(file_rows)
+    next(file_rows)
+
+    headers = ['name', 'uid', 'value', 'latitude', 'longitude', 'picture']
 
     for row in file_rows:
         temp_dict = {}
