@@ -198,7 +198,7 @@ class CollectibleItemUploadFileApiView(APIView):
             serializer = serializers.CollectibleItemSerializer(data=row)
             if serializer.is_valid():
                 serializer.save()
-
-            bad_rows.append(list(row.values()))
+            else:
+                bad_rows.append(list(row.values()))
 
         return Response(data=bad_rows, status=status.HTTP_200_OK)
