@@ -48,7 +48,7 @@ class UserItemSerializer(UserSerializer):
 
     def get_items(self, obj):
         return [
-            item for item in obj.collectible_items.all()
+            item.name for item in obj.collectible_items.all()
         ]
 
 class AthleteInfoSerializer(serializers.ModelSerializer):

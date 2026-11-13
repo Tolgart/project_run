@@ -185,7 +185,7 @@ class PositionViewSet(viewsets.ModelViewSet):
     def _collect_items(self, position):
         user = position.run.athlete
 
-        for item in CollectibleItem.objects.all():
+        for item in CollectibleItem.objects.exclude(users=user):
             distance = distance_in_meters(
                 position.latitude, position.longitude,
                 item.latitude, item.longitude,
