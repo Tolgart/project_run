@@ -1,4 +1,4 @@
-from geopy.distance import distance
+from geopy.distance import distance, geodesic
 from .models import Position
 import openpyxl
 

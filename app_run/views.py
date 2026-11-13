@@ -103,6 +103,13 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['first_name', 'last_name']
     ordering_fields = ['date_joined']
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return serializers.UserSerializer
+        elif self.action == 'retrieve':
+            return serializers.UserSerializer
+        return super().get_serializer_class()
+
     def get_queryset(self):
         qs = self.queryset.exclude(is_superuser=True)
 

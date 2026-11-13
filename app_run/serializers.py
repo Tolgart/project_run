@@ -39,6 +39,18 @@ class UserSerializer(serializers.ModelSerializer):
         return obj.runs.filter(status=Run.StatusChoices.FINISHED).count()
 
 
+class UserItemSerializer(UserSerializer):
+    collectible_items = serializers.SerializerMethodField()
+
+    class Meta(UserSerializer.Meta):
+        model = User
+        fields = UserSerializer.Meta.fields + ['collectible_items']
+
+    def get_collectible_items(self, obj):
+        return [
+            item for item in obj.collectible_items.all()
+        ]
+
 class AthleteInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AthleteInfo
@@ -81,7 +93,7 @@ class PositionSerializer(serializers.ModelSerializer):
 class CollectibleItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectibleItem
-        fields = '__all__'
+        fields = ['id', 'name', 'uid', 'latitude', 'longitude', 'picture', 'value']
 
     def validate_latitude(self, value):
         if not (-90.0 <= value <= 90.0):
