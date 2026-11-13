@@ -1,3 +1,4 @@
+import geopy
 from geopy.distance import distance, geodesic
 from .models import Position
 import openpyxl
@@ -21,6 +22,9 @@ def calculate_distance(run_id):
 
     return total_distance_km
 
+
+def distance_in_meters(lat1, lon1, lat2, lon2):
+    return geopy.distance.geodesic(lat1, lon1, lat2, lon2).m
 
 def parse_xlsx_to_list(xlsx_file):
     wb = openpyxl.load_workbook(xlsx_file, read_only=True, data_only=True)

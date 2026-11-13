@@ -36,7 +36,6 @@ class Position(models.Model):
     def __str__(self):
         return f'{self.run}: ({self.latitude}, {self.longitude})'
 
-
 class CollectibleItem(models.Model):
     name = models.CharField(max_length=255)
     uid = models.CharField(max_length=255)

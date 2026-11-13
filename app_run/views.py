@@ -15,7 +15,7 @@ from django.db.models import Count, Sum
 from app_run.models import Run, AthleteInfo, Challenge, Position, CollectibleItem
 from app_run import serializers
 
-from .services import calculate_distance, parse_xlsx_to_list
+from .services import calculate_distance, parse_xlsx_to_list, distance_in_meters
 
 @api_view(['GET'])
 def company_contacts(request):
@@ -177,6 +177,19 @@ class PositionViewSet(viewsets.ModelViewSet):
             qs = qs.filter(run=run)
 
         return qs
+
+    def perform_create(self, serializer):
+        position = serializer.save(user=self.request.user)
+        self._collect_items(position, self.request.user)
+
+    def _collect_items(self, position, user):
+        for item in CollectibleItem.objects.all():
+            distance = distance_in_meters(
+                position.latitude, position.longitude,
+                item.latitude, item.longitude,
+            )
+            if distance <= 100:
+                user.collected_items.add(item)
 
 
 class CollectibleItemViewSet(viewsets.ModelViewSet):
