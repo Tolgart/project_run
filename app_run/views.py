@@ -107,7 +107,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == 'list':
             return serializers.UserSerializer
         elif self.action == 'retrieve':
-            return serializers.UserSerializer
+            return serializers.UserItemSerializer
         return super().get_serializer_class()
 
     def get_queryset(self):
