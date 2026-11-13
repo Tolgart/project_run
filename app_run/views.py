@@ -179,17 +179,19 @@ class PositionViewSet(viewsets.ModelViewSet):
         return qs
 
     def perform_create(self, serializer):
-        position = serializer.save(user=self.request.user)
-        self._collect_items(position, self.request.user)
+        position = serializer.save()
+        self._collect_items(position)
 
-    def _collect_items(self, position, user):
+    def _collect_items(self, position):
+        user = position.run.athlete
+
         for item in CollectibleItem.objects.all():
             distance = distance_in_meters(
                 position.latitude, position.longitude,
                 item.latitude, item.longitude,
             )
             if distance <= 100:
-                user.collected_items.add(item)
+                user.collectible_items.add(item)
 
 
 class CollectibleItemViewSet(viewsets.ModelViewSet):
