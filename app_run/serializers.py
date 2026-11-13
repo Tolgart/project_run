@@ -47,9 +47,10 @@ class UserItemSerializer(UserSerializer):
         fields = UserSerializer.Meta.fields + ['items']
 
     def get_items(self, obj):
-        return [
-            CollectibleItemSerializer(item).data for item in obj.collectible_items.all()
-        ]
+        serializer = CollectibleItemSerializer(
+            obj.collectible_items.all(), many=True,
+        )
+        return serializer.data
 
 class AthleteInfoSerializer(serializers.ModelSerializer):
     class Meta:
