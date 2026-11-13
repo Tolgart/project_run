@@ -40,13 +40,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserItemSerializer(UserSerializer):
-    collectible_items = serializers.SerializerMethodField()
+    items = serializers.SerializerMethodField()
 
     class Meta(UserSerializer.Meta):
         model = User
-        fields = UserSerializer.Meta.fields + ['collectible_items']
+        fields = UserSerializer.Meta.fields + ['items']
 
-    def get_collectible_items(self, obj):
+    def get_items(self, obj):
         return [
             item for item in obj.collectible_items.all()
         ]
